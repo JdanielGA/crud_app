@@ -2,6 +2,7 @@ from utils.screens import *
 from utils.tools import *
 from utils.seconds_screens import *
 from utils.read_registers import *
+from utils.create_registers import *
 
 
 
@@ -17,7 +18,23 @@ def run ():
         choice_main_menu = main_screen()
 
         if choice_main_menu == "1":
-            pass
+            while True:
+                clean_screen()
+                question = input("Do yo want to creat a new register? (Y/N): ").lower()
+                
+                if question == 'y':
+                    client_data = pre_register()
+
+                    if client_data is not None:
+                        _csv_file_path = './documents/registers.csv'
+                        create_client(_csv_file_path, client_data)
+                        input('\n'+'Press -Enter key- to continue:')
+                
+                elif question == 'n' or question == 'no':
+                    break
+
+                else:
+                    input('Invalid input! press -Enter key- to continue: ')
 
         elif choice_main_menu == "2":
 

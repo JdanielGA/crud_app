@@ -9,6 +9,25 @@ def read_csv(_file_path="./documents/registers.csv"):
         registers = list(csv.DictReader(csv_file))
         return registers
 
+def search_exact_by_name(registers, name_to_search):
+
+    filtered_list = []
+    idx = 0
+
+    for ref, organization in enumerate(registers):
+        if name_to_search.lower() == organization["Organization name"].lower():
+            filtered_list.append(organization)
+            idx = ref
+    
+    if filtered_list:
+        client_dict = filtered_list
+        return client_dict, idx
+    
+    else:
+        client_dict = None
+        idx = None
+        return client_dict, idx
+
 
 def search_by_name(registers):
     
@@ -22,6 +41,26 @@ def search_by_name(registers):
         idx = registers.index(client_dict)
         return client_dict, idx
     
+    else:
+        client_dict = None
+        idx = None
+        return client_dict, idx
+    
+
+def search_exact_by_id(registers, id_to_search):
+    
+    filtered_list = []
+    idx = 0
+
+    for ref, organization in enumerate(registers):
+        if id_to_search == organization["ID Number"]:
+            filtered_list.append(organization)
+            idx = ref
+
+
+    if filtered_list:
+        client_dict = filtered_list
+        return client_dict, idx
     else:
         client_dict = None
         idx = None

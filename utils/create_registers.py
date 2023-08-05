@@ -1,8 +1,8 @@
+from utils.read_registers import read_csv, search_exact_by_name, search_exact_by_id
 from utils.tools import clean_screen, show_one_register, wait
 import csv
 
 def pre_register():
-
 
     client_data ={
             'Organization name': '',
@@ -20,26 +20,37 @@ def pre_register():
 
 
     while True:
-
         for key in client_data:
-            
-            clean_screen()
-
             while True:
-                print('Type "exit" if you wat to return')
+                clean_screen()
+                print('You can return if you type "exit".'+'\n')
                 value = input(f'Enter the {key}: ')
-                stop_adding = value.lower()
-                if stop_adding == 'exit':
+                
+                if value.lower() == 'exit':
                     return None
-
-                confirmation = input(f'is {value} correct for the {key}, (Y/N): ').lower()
-                if confirmation == 'yes' or confirmation == 'y':
-                    stop_adding = confirmation.lower()
-                    if stop_adding == 'exit':
+                
+                elif key == 'Organization name':
+                    assessment, idx = search_exact_by_name(read_csv(), value)
+                    if assessment is not None:
+                        input('\n'f'This register "{value}" already exists in tne index {idx}! press -Enter key- to continue: ')
                         return None
                     
+                elif key == 'ID Number':
+                    assessment, idx = search_exact_by_id(read_csv(), value)
+                    if assessment is not None:
+                        input('\n'f'This register "{value}" already exists in tne index {idx}! press -Enter key- to continue: ')
+                        return None
+                    
+                clean_screen()
+                print('You can return if you type "exit".'+'\n')
+                confirmation = input(f'is "{value}" correct for the {key}, (Y/N): ').lower()
+
+                if confirmation == 'yes' or confirmation == 'y':
                     pre_dict[key] = value
-                    break  
+                    break
+
+                elif confirmation == 'exit':
+                    return None
 
                 else:
                     print(f'The {key} has not been added')
