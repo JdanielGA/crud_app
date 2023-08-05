@@ -25,7 +25,9 @@ def charging_screen():
 
 
 def show_registers(data):
-    pass
+    
+    for element in data:
+        show_one_register(element)
 
 
 def show_one_register(data):

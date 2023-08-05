@@ -47,10 +47,9 @@ def run ():
                     search_register(read_csv())
 
                 elif choice == "2":
-                    registers = read_csv()
-                    
-                    for data in registers:
-                        show_one_register(data)
+                    clean_screen()
+                    registers = read_csv()                    
+                    show_registers(registers)
                     
                     input("Press Enter key for return: ")
 

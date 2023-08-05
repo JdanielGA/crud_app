@@ -1,5 +1,5 @@
 import csv
-from utils.tools import show_one_register, clean_screen
+from utils.tools import show_registers, clean_screen
 from utils.seconds_screens import search_screen
 
 
@@ -37,14 +37,12 @@ def search_by_name(registers):
     filtered_list = list(filter(lambda organization: name_to_search.lower() in organization["Organization name"].lower(), registers))
     
     if filtered_list:
-        client_dict = filtered_list[0]
-        idx = registers.index(client_dict)
-        return client_dict, idx
+        client_dict = filtered_list
+        return client_dict
     
     else:
         client_dict = None
-        idx = None
-        return client_dict, idx
+        return client_dict
     
 
 def search_exact_by_id(registers, id_to_search):
@@ -61,6 +59,7 @@ def search_exact_by_id(registers, id_to_search):
     if filtered_list:
         client_dict = filtered_list
         return client_dict, idx
+    
     else:
         client_dict = None
         idx = None
@@ -75,14 +74,12 @@ def search_by_id(registers):
     filtered_list = list(filter(lambda id_number: id_to_search in id_number["ID Number"], registers))
 
     if filtered_list:
-        client_dict = filtered_list[0]
-        idx = registers.index(client_dict)
-        return client_dict, idx
+        client_dict = filtered_list
+        return client_dict
     
     else:
         client_dict = None
-        idx = None
-        return client_dict, idx
+        return client_dict
 
 
 def search_register(registers):
@@ -93,13 +90,13 @@ def search_register(registers):
         choice = search_screen()
 
         if choice == '1':
-            client, idx = search_by_name(registers)
+            client = search_by_name(registers)
 
             if client == None:
                 print("\n"+"The register entered has not been created yet!"+"\n")
             
             elif client is not None:
-                show_one_register(client)
+                show_registers(client)
 
             new_search = input('Do you want to do another search? (Y/N): ').lower()
             
@@ -107,13 +104,13 @@ def search_register(registers):
                 break
 
         elif choice == '2':
-            client, idx = search_by_id(registers)
+            client = search_by_id(registers)
 
             if client == None:
                 print("\n"+"The register entered has not been created yet!"+"\n")
             
             elif client is not None:
-                show_one_register(client)
+                show_registers(client)
 
             new_search = input('Do you want to do another search? (Y/N): ')
 
