@@ -1,2 +1,2 @@
-def update_register():
+def delete_register():
     pass
