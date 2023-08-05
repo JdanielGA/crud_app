@@ -1,88 +1,93 @@
-from utils.registers import read_csv
-from utils.seconds_screens import search_screen
-    
+import csv
 
 
-def search_by_name(registers):
-    
-    name_to_search = input("Type the organization name: ")
-
-    filtered_list = list(filter(lambda organization: name_to_search.lower() in organization["Organization name"].lower(), registers))
-    
-    if filtered_list:
-        client_dict = filtered_list[0]
-        idx = registers.index(client_dict)
-        return client_dict, idx
-    
-    else:
-        client_dict = None
-        idx = None
-        return client_dict, idx
+_csv_file_path = './documents/registers.csv'
 
 
-def search_by_id(registers):
-    
-    id_to_search = input("Type the ID number: ")
-
-    filtered_list = list(filter(lambda id_number: id_to_search in id_number["ID Number"], registers))
-
-    if filtered_list:
-        client_dict = filtered_list[0]
-        idx = registers.index(client_dict)
-        return client_dict, idx
-    
-    else:
-        client_dict = None
-        idx = None
-        return client_dict, idx
+def pre_register():
 
 
-def show_registers(data):
+    client_data ={
+            'Organization name': '',
+            'ID Number': '',
+            'Email': '',
+            'Phone number': '',
+            'City': '',
+            'Adress': '',
+            'Contact name': '',
+            'Contact phone number': '',
+            'Other information': ''
+        }
 
-    print(("-----"*20)+"\n")
-
-    for key, value in data.items():
-        print(f"{key}: {value}")
-
-    print("\n"+('-----'*20)+"\n")
+    pre_dict = {}
 
 
-while True:
+    while True:
 
-    registers = read_csv()
-    choice = search_screen()
+        for key in client_data:
+            
+            while True:
+                value = input(f'Enter the {key}: ')
+                confirmation = input(f'is {value} correct for the {key}, (Y/N): ').lower()
 
+                if confirmation == 'yes' or confirmation == 'y':
+                    pre_dict[key] = value
+                    break        
+                else:
+                    print(f'The {key} has not been added')
 
-    if choice == '1':
-        client, idx = search_by_name(registers)
+        print('Please check the data: '+'\n')
 
-        if client == None:
-            print("\n"+"The register entered has not been created yet!"+"\n")
-        
-        elif client is not None:
-            show_registers(client)
+        for key, value in pre_dict.items():
+            print(f'{key}: {value}')
 
-        new_search = input('Do you want to do another search? (Y/N): ').lower()
-        
-        if new_search == 'n' or new_search =='no':
+        final_confirmation = input(f'\n'+'is the data correct? (Y/N): ').lower()
+
+        if final_confirmation == 'yes' or final_confirmation == 'y':
+            client_data = pre_dict
+            print('This client was created:'+'\n')
+
+            for key, value in client_data.items():
+                print(f'{key}: {value}')
             break
-
-    elif choice == '2':
-        client, idx = search_by_id(registers)
-
-        if client == None:
-            print("\n"+"The register entered has not been created yet!"+"\n")
-        
-        elif client is not None:
-            show_registers(client)
-
-        new_search = input('Do you want to do another search? (Y/N): ')
-
-        if new_search == 'n' or new_search =='no':
-            break
+        else:
+            print('\n'+'The client was not created:')
+            pre_dict = {}
     
-    elif choice == '3':
-        break
+    return client_data
 
-    else:
-        print('Wrong input value! Pleas, choose a valid option')
+
+def create_client(_csv_file_path, client_data):
+
+    header = list(client_data.keys())
+
+    try:
+        with open(_csv_file_path, 'r', newline='') as file:
+            reader = csv.DictReader(file)
+            data = list(reader)
+
+    except FileNotFoundError:
+        with open(_csv_file_path, 'w', newline='') as file:
+            writer = csv.DictWriter(file, fieldnames=header)
+            writer.writeheader()
+            data = []
+
+
+    data.append(client_data)
+
+
+    with open(_csv_file_path, 'w', newline='') as file:
+        writer = csv.DictWriter(file, fieldnames=header)
+        writer.writeheader()
+        writer.writerows(data)
+
+
+    print("The client was created successfully")
+
+
+
+if __name__ == "__main__":
+
+    
+    client_data = pre_register()
+    create_client(_csv_file_path, client_data)
