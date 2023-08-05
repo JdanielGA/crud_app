@@ -1,12 +1,15 @@
 import csv
+from testing_tools import *
+from registers import *
 
 
-def create_new_client():
-
-    _csv_file_path = './documents/registers.csv'
+_csv_file_path = './documents/registers.csv'
 
 
-    clients ={
+def pre_register():
+
+
+    client_data ={
             'Organization name': '',
             'ID Number': '',
             'Email': '',
@@ -23,10 +26,26 @@ def create_new_client():
 
     while True:
 
-        for key in clients:
+        for key in client_data:
             
+            clean_screen()
+
             while True:
                 value = input(f'Enter the {key}: ')
+                stop_adding = value.lower()
+                if stop_adding == 'exit':
+                    return None
+                
+                elif key == 'Organization name':
+                    assessment = search_by_name(read_csv(), value)
+                    if assessment is not None:
+                        return None
+                    
+                elif key == 'ID Number':
+                    assessment = search_exact_by_id(read_csv(), value)
+                    if assessment is not None:
+                        return None
+
                 confirmation = input(f'is {value} correct for the {key}, (Y/N): ').lower()
 
                 if confirmation == 'yes' or confirmation == 'y':
@@ -35,6 +54,7 @@ def create_new_client():
                 else:
                     print(f'The {key} has not been added')
 
+        clean_screen()
         print('Please check the data: '+'\n')
 
         for key, value in pre_dict.items():
@@ -43,19 +63,24 @@ def create_new_client():
         final_confirmation = input(f'\n'+'is the data correct? (Y/N): ').lower()
 
         if final_confirmation == 'yes' or final_confirmation == 'y':
-            clients = pre_dict
+            clean_screen()
+            client_data = pre_dict
             print('This client was created:'+'\n')
 
-            for key, value in clients.items():
-                print(f'{key}: {value}')
+            show_one_register(client_data)
             break
         else:
-            print('\n'+'The client was not created:')
+            clean_screen()
+            print('\n'+'The client was not created!')
+            wait(2)
             pre_dict = {}
+    
+    return client_data
 
 
-    header = list(clients.keys())
+def create_client(_csv_file_path, client_data):
 
+    header = list(client_data.keys())
 
     try:
         with open(_csv_file_path, 'r', newline='') as file:
@@ -69,7 +94,7 @@ def create_new_client():
             data = []
 
 
-    data.append(clients)
+    data.append(client_data)
 
 
     with open(_csv_file_path, 'w', newline='') as file:
@@ -79,3 +104,19 @@ def create_new_client():
 
 
     print("The client was created successfully")
+
+
+
+if __name__ == "__main__":
+
+    while True:
+        question = input("Do yo want to creat a new register? (Y/N): ").lower()
+
+        if question == 'y':
+            client_data = pre_register()
+
+            if client_data is not None:
+                create_client(_csv_file_path, client_data)
+                
+        else:
+            break
