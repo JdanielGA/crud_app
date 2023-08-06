@@ -23,7 +23,6 @@ CRUD APP is a simple command-line application for managing client data using bas
 ## Project Structure
 The project contains the following files and folders:
 
-- `app/`: Main application folder. *at this moment is empty
 - `documents/`: Folder for storing client records in a CSV file.
    - `Registers.csv`: CSV file for storing client information.
 - `test/`: Folder for testing code and testing-related files.
