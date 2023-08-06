@@ -23,15 +23,15 @@ CRUD APP is a simple command-line application for managing client data using bas
 ## Project Structure
 The project contains the following files and folders:
 
-- `app/`: Main application folder.
-  - `documents/`: Folder for storing client records in a CSV file.
-    - `Registers.csv`: CSV file for storing client information.
-  - `test/`: Folder for testing code and testing-related files.
-    - `__pycache__/`: Compiled Python files (automatically generated).
-    - `create_new_client.py`: Test code for creating a new client.
-  - `registers.py`: Module containing functions to read and search client records.
-  - `seconds_screens.py`: Module containing functions for displaying secondary screens.
-  - `testing_tools.py`: Module containing testing-related functions.
+- `app/`: Main application folder. *at this moment is empty
+- `documents/`: Folder for storing client records in a CSV file.
+   - `Registers.csv`: CSV file for storing client information.
+- `test/`: Folder for testing code and testing-related files.
+   - `__pycache__/`: Compiled Python files (automatically generated).
+   - `create_new_client.py`: Test code for creating a new client.
+   - `registers.py`: Module containing functions to read and search client records.
+   - `seconds_screens.py`: Module containing functions for displaying secondary screens.
+   - `testing_tools.py`: Module containing testing-related functions.
 - `Utils/`: Folder containing utility functions and modules.
   - `__pycache__/`: Compiled Python files (automatically generated).
   - `__init__.py`: Empty file indicating the folder is a Python package.
