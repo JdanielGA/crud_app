@@ -3,6 +3,7 @@ from utils.tools import *
 from utils.seconds_screens import *
 from utils.read_registers import *
 from utils.create_registers import *
+from utils.delete_registers import *
 
 
 
@@ -56,15 +57,63 @@ def run ():
                 elif choice == "3":
                     break
 
+                else:
+                    input('\n'+'Invalid input! press -Enter key- to continue: ')
                     
-
         elif choice_main_menu == "3":
             clean_screen()
             choice = update_screen()
 
         elif choice_main_menu == "4":
-            clean_screen()
-            choice = delete_screen()
+            while True:
+                clean_screen()
+                choice = delete_screen()
+
+                if choice == '1':
+                    while True:
+                        clean_screen()
+                        method_of_search = search_screen()
+
+                        if method_of_search == '1':
+                            clean_screen()
+                            registers = read_csv()
+                            name_to_search = input('Enter the name of the company you want to delete: ')
+                            client_dict, idx = search_exact_by_name(registers, name_to_search)
+                            
+                            if client_dict is not None:
+                                delete_register(registers, idx)
+
+                            else:
+                                input(f'\n{name_to_search} does not exit! Press -Enter key- to continue: ')
+                            
+
+                        elif method_of_search == '2':
+                            clean_screen()
+                            registers = read_csv()
+                            name_to_search = input('Enter the ID number of the company you want to delete: ')
+                            client_dict, idx = search_exact_by_id(registers, name_to_search)
+                            
+                            if client_dict is not None:
+                                delete_register(registers, idx)
+
+                            else:
+                                input(f'\n{name_to_search} does not exit! Press -Enter key- to continue: ')
+
+                        elif method_of_search == '3':
+                            break
+
+                        else:
+                            input('\n'+'Invalid input! press -Enter key- to continue: ')
+
+                elif choice == '2':
+                    clean_screen()
+                    delete_all_registers()
+
+                elif choice == '3':
+                    break
+
+                else:
+                    input('\n'+'Invalid input! press -Enter key- to continue: ')
 
         elif choice_main_menu.lower() == "exit":
             clean_screen()

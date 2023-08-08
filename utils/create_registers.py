@@ -65,9 +65,8 @@ def pre_register():
 
         if final_confirmation == 'yes' or final_confirmation == 'y':
             clean_screen()
-            client_data = pre_dict
             print('This client is being adding:'+'\n')
-            show_one_register(client_data)
+            show_one_register(pre_dict)
             wait(1)
             break
 
@@ -77,7 +76,7 @@ def pre_register():
             wait(2)
             pre_dict = {}
     
-    return client_data
+    return pre_dict
 
 
 def create_client(_csv_file_path, client_data):
@@ -105,4 +104,4 @@ def create_client(_csv_file_path, client_data):
         writer.writerows(data)
 
 
-    print("The client was created successfully")
+    print('The client was created successfully!, press -Enter key- to continue: ')
