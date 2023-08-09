@@ -31,7 +31,7 @@ def search_exact_by_name(registers, name_to_search):
             idx = ref
     
     if filtered_list:
-        client_dict = filtered_list
+        client_dict = filtered_list[0]
         return client_dict, idx
     
     else:

@@ -24,7 +24,8 @@ def run ():
                 question = input("Do yo want to creat a new register? (Y/N): ").lower()
                 
                 if question == 'y':
-                    client_data = pre_register()
+                    registers = read_csv()
+                    client_data = pre_register(registers)
 
                     if client_data is not None:
                         _csv_file_path = './documents/registers.csv'
@@ -38,7 +39,6 @@ def run ():
                     input('Invalid input! press -Enter key- to continue: ')
 
         elif choice_main_menu == "2":
-
             while True:
                 clean_screen()
                 choice = registers_screen()
@@ -61,8 +61,55 @@ def run ():
                     input('\n'+'Invalid input! press -Enter key- to continue: ')
                     
         elif choice_main_menu == "3":
-            clean_screen()
-            choice = update_screen()
+            while True:
+                clean_screen()
+                choice = update_screen()
+
+                if choice == '1':
+                    clean_screen()
+                    method_of_search = search_screen()
+                    while True:
+                        if method_of_search == '1':
+                            registers = read_csv()
+                            name_to_search = input('Enter the name of the company you want to update: ')
+                            client_dict, idx = search_exact_by_name(registers, name_to_search)
+
+                        elif method_of_search == '2':
+                            registers = read_csv()
+                            name_to_search = input('Enter the ID number of the company you want to update: ')
+                            client_dict, idx = search_exact_by_id(registers, name_to_search)
+
+                        elif method_of_search == '3':
+                            break
+
+                        else:
+                            input('\n'+'Invalid input! press -Enter key- to continue: ')
+
+                elif choice == '2':
+                    clean_screen()
+                    method_of_search = search_screen()
+                    while True:
+                        if method_of_search == '1':
+                            registers = read_csv()
+                            name_to_search = input('Enter the name of the company you want to update: ')
+                            client_dict, idx = search_exact_by_name(registers, name_to_search)
+
+                        elif method_of_search == '2':
+                            registers = read_csv()
+                            name_to_search = input('Enter the ID number of the company you want to update: ')
+                            client_dict, idx = search_exact_by_id(registers, name_to_search)
+
+                        elif method_of_search == '3':
+                            break
+
+                        else:
+                            input('\n'+'Invalid input! press -Enter key- to continue: ')
+
+                elif choice == '3':
+                    break
+
+                else:
+                    input('\n'+'Invalid input! press -Enter key- to continue: ')
 
         elif choice_main_menu == "4":
             while True:

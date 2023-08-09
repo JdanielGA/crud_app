@@ -1,8 +1,8 @@
-from utils.read_registers import read_csv, search_exact_by_name, search_exact_by_id
+from utils.read_registers import search_exact_by_name, search_exact_by_id
 from utils.tools import clean_screen, show_one_register, wait
 import csv
 
-def pre_register():
+def pre_register(registers):
 
     client_data ={
             'Organization name': '',
@@ -30,13 +30,13 @@ def pre_register():
                     return None
                 
                 elif key == 'Organization name':
-                    assessment, idx = search_exact_by_name(read_csv(), value)
+                    assessment, idx = search_exact_by_name(registers, value)
                     if assessment is not None:
                         input('\n'f'This register "{value}" already exists in tne index {idx}! press -Enter key- to continue: ')
                         return None
                     
                 elif key == 'ID Number':
-                    assessment, idx = search_exact_by_id(read_csv(), value)
+                    assessment, idx = search_exact_by_id(registers, value)
                     if assessment is not None:
                         input('\n'f'This register "{value}" already exists in tne index {idx}! press -Enter key- to continue: ')
                         return None

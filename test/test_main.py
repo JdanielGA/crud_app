@@ -1,5 +1,7 @@
 from testing_tools import *
 from test_registers import *
+from create_new_client import *
+from test_update import *
 
 
 clients_list = [
@@ -60,43 +62,32 @@ clients_list = [
     }
 ]
 
+## Option 1:
+# if client_dict is not None:
+#         print('\n'+'You are going to update the following information: ')
+#         show_registers(client_dict)
+#         confirmation = input('\n'+'type (Y/N) to continue: ').lower()
+#         if confirmation == 'y' or confirmation == 'yes':
+#             full_register_update(_registers, idx)
 
 
-def _delete_one_register(clients_list, idx):
+def run():
     
-    _pre_list = clients_list
-    register_eliminated = _pre_list.pop(idx)
-    print('\n'+'You are going to eliminate the following register:'+'\n')
-    show_one_register(register_eliminated)
-    confirmation = input('\n'+'Type "Confirm" to continue: ').lower()
-    if confirmation == 'confirm':
-        return _pre_list
-    else:
-        return None
-
-
-def run (clients_list):
-
     clean_screen()
-    show_registers(clients_list)
-    _find_register = input('Type the name of the register to eliminate: ')
-    register_dict, idx = search_exact_by_name(clients_list, _find_register)
-    _prelist = _delete_one_register(clients_list, idx)
+    _registers = [client.copy() for client in clients_list]
+    name_to_search = 'Company 05'
+    client_dict, idx = search_exact_by_name(_registers, name_to_search)
 
-    if _prelist is not None:
-        clients_list = _prelist
-        print('The register was eliminated successfully. This is the new list: '+'\n')
-        show_registers(clients_list)
-        input('press -Enter key- to continue: ')
-        return clients_list
+    if client_dict is not None:
+        
+        new_list = simple_register_update(_registers, client_dict)
 
     else:
-        print('\n'+'The register was not eliminated successfully.')
-        register_dict = None
-        idx = None
-        return register_dict, idx
+        input('That register does not exit! Press -Enter key- to continue: ')
 
-
+    show_registers(new_list)
+    
 
 if __name__ == "__main__":
-    run(clients_list)
+    run()
+    show_registers(clients_list)
