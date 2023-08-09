@@ -1,8 +1,9 @@
 from utils.screens import *
 from utils.tools import *
 from utils.seconds_screens import *
-from utils.read_registers import *
 from utils.create_registers import *
+from utils.read_registers import *
+from utils.update_register import *
 from utils.delete_registers import *
 
 
@@ -70,14 +71,32 @@ def run ():
                     method_of_search = search_screen()
                     while True:
                         if method_of_search == '1':
-                            registers = [client.copy() for client in read_csv()]
+                            clean_screen()
+                            registers = read_csv()
                             name_to_search = input('Enter the name of the company you want to update: ')
                             client_dict, idx = search_exact_by_name(registers, name_to_search)
 
+                            if client_dict is not None:
+                                full_update(registers, idx)
+                                break
+
+                            else:
+                                input(f'\n{name_to_search} does not exit! Press -Enter key- to continue: ')
+                                break
+
                         elif method_of_search == '2':
-                            registers = [client.copy() for client in read_csv()]
+                            clean_screen()
+                            registers = read_csv()
                             name_to_search = input('Enter the ID number of the company you want to update: ')
                             client_dict, idx = search_exact_by_id(registers, name_to_search)
+
+                            if client_dict is not None:
+                                full_update(registers, idx)
+                                break
+
+                            else:
+                                input(f'\n{name_to_search} does not exit! Press -Enter key- to continue: ')
+                                break
 
                         elif method_of_search == '3':
                             break
@@ -90,14 +109,30 @@ def run ():
                     method_of_search = search_screen()
                     while True:
                         if method_of_search == '1':
-                            registers = [client.copy() for client in read_csv()]
-                            name_to_search = input('Enter the name of the company you want to update: ')
+                            registers = read_csv()
+                            name_to_search = input('\nEnter the name of the company you want to update: ')
                             client_dict, idx = search_exact_by_name(registers, name_to_search)
+
+                            if client_dict is not None:
+                                simple_update(registers, idx)
+                                break
+
+                            else:
+                                input(f'\n{name_to_search} does not exit! Press -Enter key- to continue: ')
+                                break
 
                         elif method_of_search == '2':
                             registers = [client.copy() for client in read_csv()]
-                            name_to_search = input('Enter the ID number of the company you want to update: ')
+                            name_to_search = input('\nEnter the ID number of the company you want to update: ')
                             client_dict, idx = search_exact_by_id(registers, name_to_search)
+
+                            if client_dict is not None:
+                                simple_update(registers, idx)
+                                break
+
+                            else:
+                                input(f'\n{name_to_search} does not exit! Press -Enter key- to continue: ')
+                                break
 
                         elif method_of_search == '3':
                             break
@@ -172,7 +207,6 @@ def run ():
         else:
             print("\n"+"Invalid input")
             wait(1)
-
 
 
 if __name__ == "__main__":
