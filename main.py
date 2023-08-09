@@ -70,12 +70,12 @@ def run ():
                     method_of_search = search_screen()
                     while True:
                         if method_of_search == '1':
-                            registers = read_csv()
+                            registers = [client.copy() for client in read_csv()]
                             name_to_search = input('Enter the name of the company you want to update: ')
                             client_dict, idx = search_exact_by_name(registers, name_to_search)
 
                         elif method_of_search == '2':
-                            registers = read_csv()
+                            registers = [client.copy() for client in read_csv()]
                             name_to_search = input('Enter the ID number of the company you want to update: ')
                             client_dict, idx = search_exact_by_id(registers, name_to_search)
 
@@ -90,12 +90,12 @@ def run ():
                     method_of_search = search_screen()
                     while True:
                         if method_of_search == '1':
-                            registers = read_csv()
+                            registers = [client.copy() for client in read_csv()]
                             name_to_search = input('Enter the name of the company you want to update: ')
                             client_dict, idx = search_exact_by_name(registers, name_to_search)
 
                         elif method_of_search == '2':
-                            registers = read_csv()
+                            registers = [client.copy() for client in read_csv()]
                             name_to_search = input('Enter the ID number of the company you want to update: ')
                             client_dict, idx = search_exact_by_id(registers, name_to_search)
 
@@ -137,8 +137,8 @@ def run ():
                         elif method_of_search == '2':
                             clean_screen()
                             registers = read_csv()
-                            name_to_search = input('Enter the ID number of the company you want to delete: ')
-                            client_dict, idx = search_exact_by_id(registers, name_to_search)
+                            uid_to_search = input('Enter the ID number of the company you want to delete: ')
+                            client_dict, idx = search_exact_by_id(registers, uid_to_search)
                             
                             if client_dict is not None:
                                 delete_register(registers, idx)
