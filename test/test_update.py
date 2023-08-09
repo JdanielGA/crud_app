@@ -1,14 +1,14 @@
 from create_new_client import *
 
-# def full_register_update(_registers, idx):
+def full_register_update(_registers, idx):
 
-#     new_list = _registers
-#     client_to_update = new_list.pop(idx)
-#     updated_client = pre_register(new_list)
-#     new_list.append(updated_client)
-#     new_list.sort(key=lambda x:x['Organization name'])
-#     print('The client was update successfully')
-#     return new_list
+    new_list = _registers
+    client_to_update = new_list.pop(idx)
+    updated_client = pre_register(new_list)
+    new_list.append(updated_client)
+    new_list.sort(key=lambda x:x['Organization name'])
+    print('The client was update successfully')
+    return new_list
 
 
 def simple_register_update(_registers, client_dict):
