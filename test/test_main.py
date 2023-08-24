@@ -1,93 +1,87 @@
-from testing_tools import *
-from test_registers import *
-from create_new_client import *
-from test_update import *
+from fastapi import FastAPI
+from fastapi.responses import HTMLResponse
+from typing import List, Dict
+import csv, os
 
 
-clients_list = [
-    {
-        'Organization name': 'Company 01',
-        'ID Number': '100200001',
-        'Email': 'info@Company01.com',
-        'Phone number': '300400101',
-        'City': 'Bogotá',
-        'Adress': 'Calle 123 #45-67',
-        'Contact name': 'Sebastián López Gómez',
-        'Contact phone number': '3215551234',
-        'Other information': 'additional info 1'
-    },
-    {
-        'Organization name': 'Company 02',
-        'ID Number': '100200002',
-        'Email': 'info@Company02.com',
-        'Phone number': '300400102',
-        'City': 'Medellín',
-        'Adress': 'Carrera 78A #23-45',
-        'Contact name': 'Valentina Mendoza',
-        'Contact phone number': '3104445678',
-        'Other information': 'additional info 2'
-    },
-    {
-        'Organization name': 'Company 03',
-        'ID Number': '100200003',
-        'Email': 'info@Company03.com',
-        'Phone number': '300400103',
-        'City': 'Cali',
-        'Adress': 'Avenida 456 #67-89',
-        'Contact name': 'Andrés Ramirez',
-        'Contact phone number': '3001112222',
-        'Other information': 'additional info 3'
-    },
-    {
-        'Organization name': 'Company 04',
-        'ID Number': '100200004',
-        'Email': 'info@Company04.com',
-        'Phone number': '300400104',
-        'City': 'Cartagena',
-        'Adress': 'Calle 987 #12-34',
-        'Contact name': 'María Rodriguez',
-        'Contact phone number': '3502223333',
-        'Other information': 'additional info 4'
-    },
-    {
-        'Organization name': 'Company 05',
-        'ID Number': '100200005',
-        'Email': 'info@Company05.com',
-        'Phone number': '300400105',
-        'City': 'Barranquilla',
-        'Adress': 'Carrera 56 #78-90',
-        'Contact name': 'Carlos Perez',
-        'Contact phone number': '3203334444',
-        'Other information': 'additional info 5'
-    }
-]
-
-## Option 1:
-# if client_dict is not None:
-#         print('\n'+'You are going to update the following information: ')
-#         show_registers(client_dict)
-#         confirmation = input('\n'+'type (Y/N) to continue: ').lower()
-#         if confirmation == 'y' or confirmation == 'yes':
-#             full_register_update(_registers, idx)
+#models
+from test_models.clients import ClientRegister
 
 
-def run():
-    
-    clean_screen()
-    _registers = [client.copy() for client in clients_list]
-    name_to_search = 'Company 05'
-    client_dict, idx = search_exact_by_name(_registers, name_to_search)
+app = FastAPI()
+app.title = 'CRUD API'
+app.description = 'A CRUD API for managing clients'
+app.version = '0.1.0'
 
-    if client_dict is not None:
-        
-        new_list = simple_register_update(_registers, client_dict)
 
-    else:
-        input('That register does not exit! Press -Enter key- to continue: ')
-
-    show_registers(new_list)
+#Read all registers
+def read_registers(_data_path):
     
 
-if __name__ == "__main__":
-    run()
-    show_registers(clients_list)
+    if not _data_path:
+        return {'message': 'File not found'}
+
+    try:
+        with open(_data_path, 'r', encoding='utf-8') as file:
+            registers = list(csv.DictReader(file))
+            return registers
+    except:
+        return {'message': 'An error has ocurred'}
+
+
+#Creation of home page for the API
+@app.get('/', tags=['home'])
+def home_page():
+    message = HTMLResponse('''
+    <html>
+        <head>
+            <title>CRUD API</title>
+        </head>
+        <body>
+            <h1>WELCOME TO THE CRUD API</h1>
+            <h2>Here you can manage your clients</h2>
+            <h3>Go to <a href="/docs">/docs</a> to see the documentation</h3>
+            <h3>Go to <a href="/clients">/clients</a> to see the clients list</h3>
+        </body>
+    </html>
+    ''')
+    return message
+
+#Show all registers in the API
+@app.get('/clients', tags=['clients'], status_code=200, response_model=List)
+def get_clients():
+    _data_path = os.path.abspath('./test_documents/test_data.csv')
+    registers = read_registers(_data_path)
+    return registers
+
+#Read a client by id
+@app.get('/clients/{client_id}', tags=['clients'], status_code=200)
+def get_client(client_id: str):
+    _data_path = os.path.abspath('./test_documents/test_data.csv')
+    try:
+        registers = read_registers(_data_path)
+        for register in registers:
+            if register['ID Number'] == client_id:
+                return register
+        return {'message': 'Client not found'}
+    except FileNotFoundError:
+        return {'message': 'The file could not be found'}
+    except Exception as e:
+        return {'message': f'An error occurred: {str(e)}'}
+
+#Create a new client
+@app.post('/clients', tags=['clients'], status_code=201)
+def create_client(client: ClientRegister):
+    _data_path = os.path.abspath('./test_documents/test_data.csv')
+    try:
+        registers = read_registers(_data_path)
+        for register in registers:
+            if register['ID Number'] == client.id_number:
+                return {'message': 'Client already exists'}
+        with open(_data_path, 'a', encoding='utf-8', newline='') as file:
+            writer = csv.DictWriter(file, fieldnames= client.model_dump().keys())
+            writer.writerow(client.model_dump())
+        return {'message': 'Client created successfully'}
+    except FileNotFoundError:
+        return {'message': 'The file could not be found'}
+    
